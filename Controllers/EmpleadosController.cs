@@ -24,7 +24,7 @@ namespace POS.Controllers
 
         public IActionResult Create()
         {
-            ViewData["Roles"] = new SelectList(new[] { "Administrador", "Empleado" });
+            ViewData["Roles"] = new SelectList(new[] { "Admin", "Empleado" });
             return View();
         }
 
@@ -34,29 +34,13 @@ namespace POS.Controllers
         {
             if (ModelState.IsValid)
             {
+                empleado.Rol = empleado.Rol == "Administrador" ? "Admin" : empleado.Rol;
                 empleado.Contrasena = BCrypt.Net.BCrypt.HashPassword(empleado.Contrasena);
                 _context.Add(empleado);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Roles"] = new SelectList(new[] { "Administrador", "Empleado" }, empleado.Rol);
-            return View(empleado);
-        }
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var empleado = await _context.Empleados.FindAsync(id);
-            if (empleado == null)
-            {
-                return NotFound();
-            }
-
-            ViewData["Roles"] = new SelectList(new[] { "Administrador", "Empleado" }, empleado.Rol);
+            ViewData["Roles"] = new SelectList(new[] { "Admin", "Empleado" }, empleado.Rol);
             return View(empleado);
         }
 
@@ -73,6 +57,7 @@ namespace POS.Controllers
             {
                 try
                 {
+                    empleado.Rol = empleado.Rol == "Administrador" ? "Admin" : empleado.Rol;
                     if (!string.IsNullOrEmpty(empleado.Contrasena))
                     {
                         empleado.Contrasena = BCrypt.Net.BCrypt.HashPassword(empleado.Contrasena);
@@ -93,7 +78,7 @@ namespace POS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Roles"] = new SelectList(new[] { "Administrador", "Empleado" }, empleado.Rol);
+            ViewData["Roles"] = new SelectList(new[] { "Admin", "Empleado" }, empleado.Rol);
             return View(empleado);
         }
 
