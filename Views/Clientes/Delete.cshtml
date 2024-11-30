@@ -1,0 +1,31 @@
+﻿@model POS.Models.Cliente
+
+@{
+    ViewData["Title"] = "Eliminar Cliente";
+}
+
+<div class="card mt-4 shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0">Eliminar Cliente</h4>
+    </div>
+    <div class="card-body">
+        <h5 class="text-danger font-weight-bold">¿Estás seguro de que deseas eliminar este cliente?</h5>
+        <dl class="row mt-3">
+            <dt class="col-sm-3 font-weight-bold">Nombre</dt>
+            <dd class="col-sm-9">@Model.Nombre @Model.Apellido</dd>
+
+            <dt class="col-sm-3 font-weight-bold">NIT</dt>
+            <dd class="col-sm-9">@Model.NIT</dd>
+
+            <dt class="col-sm-3 font-weight-bold">Dirección</dt>
+            <dd class="col-sm-9">@Model.Direccion</dd>
+
+            <dt class="col-sm-3 font-weight-bold">Teléfono</dt>
+            <dd class="col-sm-9">@Model.Telefono</dd>
+        </dl>
+        <form method="post" class="mt-4">
+            <button type="submit" class="btn btn-danger mr-2"><i class="fas fa-trash"></i> Eliminar</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary"><i class="fas fa-undo"></i> Cancelar</a>
+        </form>
+    </div>
+</div>

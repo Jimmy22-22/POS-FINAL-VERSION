@@ -1,0 +1,274 @@
+﻿<div class="container my-5">
+    <h1 class="text-center mb-4">Bienvenido a Ventas</h1>
+
+    <div class="row">
+        <div class="col-12 mb-4">
+            <form method="get" action="@Url.Action("Index", "Ventas")">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Buscar productos..." id="searchInput" />
+                    <button class="btn btn-gradient-primary" type="submit">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </div>
+                <div class="input-group-append mt-2">
+                    <strong>Filtros:</strong>
+                    <div class="btn-group ms-3">
+                        <input type="radio" name="filter" id="filterNombre" value="nombre" checked>
+                        <label for="filterNombre"> Nombre</label>
+                        <input type="radio" name="filter" id="filterCodigo" value="codigo">
+                        <label for="filterCodigo"> Código</label>
+                        <input type="radio" name="filter" id="filterPrecio" value="precio">
+                        <label for="filterPrecio"> Precio</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12 text-end">
+            <h4 class="text-dark">Información del Cliente</h4>
+            <form id="formularioFinalizarCompra" method="post" action="@Url.Action("CrearVenta", "Ventas")">
+                <input type="hidden" id="productoIds" name="productoIds" />
+                <input type="hidden" id="cantidades" name="cantidades" />
+                <input type="hidden" id="empleadoId" name="empleadoId" value="1" />
+                <div class="mb-3">
+                    <label for="cliente" class="form-label">Seleccione al Cliente</label>
+                    <select class="form-select" id="cliente" name="clienteId" required>
+                        <option value="">Seleccione ...</option>
+                        @foreach (var cliente in ViewBag.Clientes as List<POS.Models.Cliente>)
+                        {
+                            <option value="@cliente.Id">@cliente.Nombre</option>
+                        }
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-8 mb-4">
+            <h4 class="text-dark">Productos Disponibles</h4>
+            <div class="row" id="grillaProductos">
+                @foreach (var producto in Model)
+                {
+                    <div class="col-12 col-md-4 mb-4">
+                        <div class="card shadow-sm rounded-lg">
+                            <img src="@producto.UrlImagen" class="card-img-top" style="height: 120px; object-fit: contain;" alt="@producto.Nombre">
+                            <div class="card-body text-center">
+                                <h6 class="card-title text-truncate" title="@producto.Nombre">@producto.Nombre</h6>
+                                <p class="card-text text-muted">Q.@producto.Precio</p>
+                                <p class="card-text small text-muted">Stock: @producto.Stock</p>
+                                <button class="btn btn-gradient-success w-100 add-to-cart"
+                                        data-id="@producto.Id"
+                                        data-nombre="@producto.Nombre"
+                                        data-precio="@producto.Precio"
+                                        data-stock="@producto.Stock">
+                                    <i class="bi bi-cart-plus"></i> Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <h4 class="text-dark">Tus Productos</h4>
+            <div class="list-group mb-3" id="cart"></div>
+            <div class="mt-3">
+                <h5>Total: <span id="total">Q.0.00</span></h5>
+                <button class="btn btn-gradient-primary w-100" id="botonFinalizarCompra">
+                    <i class="bi bi-cash"></i> Finalizar Compra
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-gradient-primary {
+        background: linear-gradient(45deg, #007bff, #00bcd4);
+        color: white;
+        border: none;
+    }
+
+        .btn-gradient-primary:hover {
+            background: linear-gradient(45deg, #0056b3, #008cba);
+        }
+
+    .btn-gradient-success {
+        background: linear-gradient(45deg, #4caf50, #66bb6a);
+        color: white;
+        border: none;
+    }
+
+        .btn-gradient-success:hover {
+            background: linear-gradient(45deg, #388e3c, #81c784);
+        }
+
+    .container {
+        background: #f0f8ff;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h4 {
+        color: #333;
+    }
+
+    .card {
+        border-radius: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+    .list-group-item {
+        background-color: #fafafa;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+        .list-group-item span {
+            font-weight: bold;
+        }
+</style>
+
+<script>
+    let carrito = [];
+    const contenedorCarrito = document.getElementById('cart');
+    const elementoTotal = document.getElementById('total');
+
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+
+    function actualizarCarrito() {
+        contenedorCarrito.innerHTML = '';
+        let total = 0;
+
+        carrito.forEach((item) => {
+            const nuevoElemento = document.createElement('div');
+            nuevoElemento.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+            nuevoElemento.innerHTML = `
+                ${item.nombre}
+                <span class="badge bg-primary">
+                    ${item.cantidad} x Q.${item.precio.toFixed(2)} = Q.${(item.cantidad * item.precio).toFixed(2)}
+                </span>
+                <div>
+                    <button class="btn btn-sm btn-secondary decrement-item" data-id="${item.id}">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger remove-item" data-id="${item.id}">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            contenedorCarrito.appendChild(nuevoElemento);
+            total += item.cantidad * item.precio;
+        });
+
+        elementoTotal.textContent = `Q.${total.toFixed(2)}`;
+    }
+
+    document.getElementById('grillaProductos').addEventListener('click', function (e) {
+        if (e.target.closest('.add-to-cart')) {
+            const button = e.target.closest('.add-to-cart');
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            const precio = parseFloat(button.getAttribute('data-precio'));
+            const stock = parseInt(button.getAttribute('data-stock'));
+
+            const productoEnCarrito = carrito.find(item => item.id === id);
+
+            if (productoEnCarrito) {
+                if (productoEnCarrito.cantidad < stock) {
+                    productoEnCarrito.cantidad++;
+                } else {
+                    alert('No hay suficiente stock');
+                    return;
+                }
+            } else {
+                if (stock > 0) {
+                    carrito.push({ id, nombre, precio, cantidad: 1 });
+                } else {
+                    alert('Este producto no está disponible');
+                    return;
+                }
+            }
+            actualizarCarrito();
+        }
+    });
+
+    document.getElementById('cart').addEventListener('click', function (e) {
+        if (e.target.closest('.decrement-item')) {
+            const button = e.target.closest('.decrement-item');
+            const id = button.getAttribute('data-id');
+            const item = carrito.find(item => item.id === id);
+
+            if (item.cantidad > 1) {
+                item.cantidad--;
+            } else {
+                carrito = carrito.filter(item => item.id != id);
+            }
+
+            actualizarCarrito();
+        }
+
+        if (e.target.closest('.remove-item')) {
+            const button = e.target.closest('.remove-item');
+            const id = button.getAttribute('data-id');
+            carrito = carrito.filter(item => item.id != id);
+            actualizarCarrito();
+        }
+    });
+
+     document.getElementById('botonFinalizarCompra').addEventListener('click', async () => {
+        const clienteId = document.getElementById('cliente').value;
+
+        if (!clienteId) {
+            alert('Seleccione un cliente');
+            return;
+        }
+
+        const venta = {
+            clienteId,
+            detalles: carrito.map(item => ({
+                productoId: parseInt(item.id),
+                cantidad: item.cantidad,
+                precioUnitario: item.precio
+            }))
+        };
+
+        console.log("Venta a enviar:", venta);
+
+        try {
+            const response = await fetch('/Ventas/CrearVenta', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(venta)
+            });
+
+            if (response.ok) {
+                const responseJson = await response.json();
+                alert('Venta finalizada con éxito. Código de venta: ' + responseJson.ventaId);
+
+                carrito = [];
+                localStorage.removeItem('carrito');
+
+                window.location.href = `/Ventas/ImprimirFactura/${responseJson.ventaId}`;
+
+                setTimeout(() => location.reload(), 3000);
+            } else {
+                alert('Error al finalizar la compra.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error al finalizar la compra.');
+        }
+    });
+</script>

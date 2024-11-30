@@ -1,0 +1,48 @@
+﻿@model IEnumerable<POS.Models.Empleado>
+
+<div class="card mt-4 shadow-sm">
+    <div class="card-header" style="background-color: #007bff; color: #ffffff;">
+        <h4 class="mb-0">Lista de Empleados</h4>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Agregar Nuevo Empleado
+            </a>
+        </p>
+        <table class="table table-striped table-bordered">
+            <thead style="background-color: #00bcd4; color: #ffffff;">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DPI</th>
+                    <th>Cargo</th>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Nombre</td>
+                        <td>@item.Apellido</td>
+                        <td>@item.DPI</td>
+                        <td>@item.Cargo</td>
+                        <td>@item.Usuario</td>
+                        <td>@item.Rol</td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success btn-sm">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

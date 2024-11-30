@@ -1,0 +1,51 @@
+﻿@model IEnumerable<POS.Models.Producto>
+@{
+    ViewData["Title"] = "Productos";
+}
+
+<div class="card mt-4 shadow-sm">
+    <div class="card-header" style="background-color: #007bff; color: #ffffff;">
+        <h4 class="mb-0">Gestión de Productos</h4>
+    </div>
+    <div class="card-body">
+        <p>
+            <a href="/Productos/Create" class="btn" style="background-color: #00bcd4; color: white; font-weight: bold;">
+                <i class="fas fa-plus"></i> Agregar Nuevo Producto
+            </a>
+        </p>
+        <table class="table table-striped table-bordered">
+            <thead style="background-color: #00bcd4; color: #ffffff;">
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Fotografía</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var producto in Model)
+                {
+                    <tr>
+                        <td>@producto.Codigo</td>
+                        <td>@producto.Nombre</td>
+                        <td>@producto.Descripcion</td>
+                        <td>@producto.Precio</td>
+                        <td>@producto.Stock</td>
+                        <td><img src="@producto.UrlImagen" alt="Imagen" width="50" /></td>
+                        <td class="text-center">
+                            <a href="/Productos/Edit/@producto.Id" class="btn btn-success btn-sm">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a href="/Productos/Delete/@producto.Id" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

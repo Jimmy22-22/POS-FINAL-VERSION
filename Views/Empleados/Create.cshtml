@@ -1,0 +1,44 @@
+﻿@model POS.Models.Empleado
+
+<div class="card mt-4 shadow-sm">
+    <div class="card-header" style="background-color: #007bff; color: #ffffff;">
+        <h4 class="mb-0">Crear Empleado</h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="Nombre" class="font-weight-bold"></label>
+                <input asp-for="Nombre" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apellido" class="font-weight-bold"></label>
+                <input asp-for="Apellido" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="DPI" class="font-weight-bold"></label>
+                <input asp-for="DPI" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Cargo" class="font-weight-bold"></label>
+                <input asp-for="Cargo" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Usuario" class="font-weight-bold"></label>
+                <input asp-for="Usuario" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Contrasena" class="font-weight-bold"></label>
+                <input asp-for="Contrasena" type="password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Rol" class="font-weight-bold"></label>
+                <select asp-for="Rol" class="form-control">
+                    <option value="Administrador">Administrador</option>
+                    <option value="Empleado">Empleado</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

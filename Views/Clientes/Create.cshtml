@@ -1,0 +1,45 @@
+﻿@model POS.Models.Cliente
+
+@{
+    ViewData["Title"] = "Crear Cliente";
+}
+
+<div class="card mt-4 shadow-sm">
+    <div class="card-header" style="background-color: #007bff; color: #ffffff;">
+        <h4 class="mb-0">Crear Cliente</h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="NIT" class="font-weight-bold"></label>
+                <input asp-for="NIT" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="font-weight-bold"></label>
+                <input asp-for="Nombre" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apellido" class="font-weight-bold"></label>
+                <input asp-for="Apellido" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion" class="font-weight-bold"></label>
+                <input asp-for="Direccion" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="Telefono" class="font-weight-bold"></label>
+                <input asp-for="Telefono" class="form-control" type="tel" id="telefono" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("telefono").addEventListener("input", function (e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+}

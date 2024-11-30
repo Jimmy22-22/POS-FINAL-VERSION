@@ -1,0 +1,45 @@
+﻿@model POS.Models.Producto
+@{
+    ViewData["Title"] = "Agregar Producto";
+}
+
+<div class="card mt-4 shadow-sm">
+    <div class="card-header" style="background-color: #007bff; color: #ffffff;">
+        <h4 class="mb-0">Agregar Producto</h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="font-weight-bold">Código</label>
+                <input asp-for="Codigo" class="form-control border-info" />
+                <span asp-validation-for="Codigo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bold">Nombre</label>
+                <input asp-for="Nombre" class="form-control border-info" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bold">Descripción</label>
+                <textarea asp-for="Descripcion" class="form-control border-info"></textarea>
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bold">Precio</label>
+                <input asp-for="Precio" class="form-control border-info" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bold">Cantidad en Inventario (Stock)</label>
+                <input asp-for="Stock" class="form-control border-info" />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bold">Fotografía</label>
+                <input type="file" name="imagen" class="form-control border-info" />
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+            <a href="/Productos" class="btn btn-secondary mt-3">Cancelar</a>
+        </form>
+    </div>
+</div>
