@@ -67,6 +67,13 @@ namespace POS.Controllers
         {
             if (ModelState.IsValid)
             {
+                var usuarioExistente = _context.Empleados.Any(e => e.Usuario == model.Usuario);
+                if (usuarioExistente)
+                {
+                    ModelState.AddModelError("Usuario", "El usuario ya existe.");
+                    return View(model);
+                }
+
                 var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Contrasena);
                 var empleado = new Empleado
                 {

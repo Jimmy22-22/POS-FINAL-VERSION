@@ -63,6 +63,8 @@ namespace POS.Controllers
         {
             if (id != producto.Id) return NotFound();
 
+            ModelState.Remove("imagen");
+
             if (ModelState.IsValid)
             {
                 if (imagen != null)

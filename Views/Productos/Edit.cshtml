@@ -37,6 +37,7 @@
                 <label class="font-weight-bold">Subir nueva imagen (si desea cambiarla):</label>
                 <input type="file" name="imagen" class="form-control" />
             </div>
+            <input type="hidden" asp-for="UrlImagen" />
             <button type="submit" class="btn" style="background-color: #00bcd4; color: white; font-weight: bold;">Guardar Cambios</button>
             <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
         </form>
